@@ -51,6 +51,11 @@ body {
   margin-top: 20px;
 }
 
+#lightscape {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
 .gallery {
   margin: 0;
 }
@@ -58,7 +63,7 @@ body {
 .gallery img {
   animation: fadeIn ease 1s;
   padding: 15px;
-  width: 200px;
+  height: 300px;
   border: 5;
 }
 

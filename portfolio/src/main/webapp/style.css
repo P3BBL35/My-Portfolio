@@ -1,5 +1,46 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
 #content {
-  margin-left: auto;
+  margin-left: 10px;
+  margin-right: auto;
+  width: 650px;
+  display: flex;
+}
+
+.fadein {
+  opacity: 1;
+  transition: opacity 2s linear; }
+
+.topnav {
+  background-color: #333;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #3D3D3D;
+}
+
+.topnav a.active {
+  background-color: #32C7BD;
+  color: white;
+}
+
+#quotes {
+  margin-left: 10px;
   margin-right: auto;
   width: 650px;
 }

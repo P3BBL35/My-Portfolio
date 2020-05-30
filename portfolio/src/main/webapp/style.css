@@ -1,6 +1,8 @@
 body {
   margin: 0;
   padding: 0;
+  background-color: #1E1E1E;
+  color: white;
 }
 
 #content {
@@ -11,8 +13,8 @@ body {
 }
 
 .fadein {
-  opacity: 1;
-  transition: opacity 2s linear; }
+  animation: fadeIn ease 1s;
+}
 
 .topnav {
   background-color: #333;
@@ -47,4 +49,33 @@ body {
 
 #greeting-container {
   margin-top: 20px;
+}
+
+#lightscape {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.gallery {
+  margin: 0;
+}
+
+.gallery img {
+  animation: fadeIn ease 1s;
+  padding: 15px;
+  height: 300px;
+  border: 5;
+}
+
+.gallery img:hover {
+    filter: grayscale();
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }

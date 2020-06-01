@@ -44,7 +44,7 @@ function getMessage() {
     var div = document.createElement("div");
     div.className = 'servlet-message';
     div.textContent = constructString(messages);
-    document.getElementById('quotes').appendChild(div);
+    document.getElementById('htmlforms').appendChild(div);
   });
 }
 

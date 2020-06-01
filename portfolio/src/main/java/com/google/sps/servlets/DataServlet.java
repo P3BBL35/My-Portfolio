@@ -26,13 +26,11 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
-  private ArrayList<String> messages = new ArrayList<>();
+  private ArrayList<String> messages;
 
   @Override
   public void init() {
-    messages.add("Hello Andrew Li!");
-    messages.add("Goodbye, World!");
-    messages.add("STEP 2020");
+    messages = new ArrayList<>();
   }
 
   @Override
@@ -44,12 +42,14 @@ public class DataServlet extends HttpServlet {
     response.getWriter().println(json);
   }
 
-  /**
-  private void insertHardCodedMessages() {
-    if (messages.size() != 3) {
-      messages.add("Hello Andrew Li!");
-      messages.add("Goodbye, World!");
-      messages.add("STEP 2020");
-    }
-  } */
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    String name = request.getParameter("username");
+    String comment = request.getParameter("comment");
+
+    final String result = name + ": " + comment;
+    messages.add(result);
+
+    response.sendRedirect("/index.html");
+  }
 }

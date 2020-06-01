@@ -34,3 +34,12 @@ function addRandomGreeting() {
   const greetingContainer = document.getElementById('greeting-container');
   greetingContainer.innerText = greeting;
 }
+
+/**
+ * Fetches the message from the servlet and displays it on the page
+ */
+function getMessage() {
+  fetch('/data').then(response => response.text()).then((quote) => {
+    document.getElementById('servlet-message').innerText = quote;
+  });
+}

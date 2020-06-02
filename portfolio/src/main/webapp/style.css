@@ -31,22 +31,57 @@ h1 {
   overflow: hidden;
 }
 
+.dropdown {
+  float: left;
+  overflow: hidden;
+}
+
+.dropdown .dropdownbutton {
+  font-size: 16px;
+  border: none;
+  outline: none;
+  color: white;
+  padding: 14px 16px;
+  background-color: inherit;
+  font-family: inherit;
+}
+
+.dropdowncontent {
+  display: none;
+  background-color: #333;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.dropdowncontent a {
+  float: none;
+  color: white;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
 .topnav a {
   float: left;
   color: #f2f2f2;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
-  font-size: 17px;
+  font-size: 16px;
 }
 
-.topnav a:hover {
-  background-color: #3D3D3D;
+.topnav a:hover, .topnav a:hover .dropdownbutton, .dropdown:hover, .dropdowncontent a:hover {
+  background-color: #32C7BD;
+}
+
+.dropdown:hover .dropdowncontent {
+  display: block;
 }
 
 .topnav a.active {
-  background-color: #32C7BD;
-  color: white;
+  color: #FFDF00;
 }
 
 #quotes {

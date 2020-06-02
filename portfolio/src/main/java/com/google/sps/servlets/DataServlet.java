@@ -38,7 +38,6 @@ public class DataServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // insertHardCodedMessages();
     Gson gson = new Gson();
     String json = gson.toJson(messages);
     response.setContentType("text/html;");

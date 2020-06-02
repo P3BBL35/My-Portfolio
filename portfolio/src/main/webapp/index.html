@@ -8,7 +8,7 @@
   <script src="script.js"></script>
 </head>
 
-<body>
+<body onload="getMessage()">
   <div class="topnav">
     <a class="active" href="index.html">Home</a>
     <a href="gallery.html">LightScape Gallery</a>
@@ -35,10 +35,17 @@
     <p>Click here to get a random message:</p>
     <button onclick="addRandomGreeting()">Random Quotes!</button>
     <div id="greeting-container"></div>
-    <button id="servlet-message" onclick="getMessage()">Hello!</button>
   </div>
   <div class="links">
     <br>
+  </div>
+  <div id="htmlforms">
+    <form action="/data" method="POST">
+      <textarea name="username">Name</textarea>
+      <textarea name="comment">Enter your comment here</textarea>
+      <input type="submit" />
+      <br/><br/>
+    </form>
   </div>
 </body>
 

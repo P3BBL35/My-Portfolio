@@ -39,7 +39,19 @@ function addRandomGreeting() {
  * Fetches the message from the servlet and displays it on the page
  */
 function getMessage() {
-  fetch('/data').then(response => response.text()).then((quote) => {
-    document.getElementById('servlet-message').innerText = quote;
+  fetch('/data').then(response => response.json()).then((messages) => {
+    console.log(messages);
+    var div = document.createElement("div");
+    div.className = 'servlet-message';
+    div.textContent = constructString(messages);
+    document.getElementById('htmlforms').appendChild(div);
   });
+}
+
+function constructString(messages) {
+  var string = '';
+  for (index = 0; index < messages.length; index++) {
+    string += messages[index] + " ";
+  }
+  return string;
 }

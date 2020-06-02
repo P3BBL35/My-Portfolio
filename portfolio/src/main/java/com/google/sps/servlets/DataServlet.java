@@ -55,6 +55,14 @@ public class DataServlet extends HttpServlet {
     response.getWriter().println(json);
   }
 
+  /**
+   * Sends a POST request to the server. In this case, the POST request simply adds a comment to
+   * the list of comments, and redirects the user back to the same page so that the comment appears
+   * on that page.
+   * @param request the servlet request
+   * @param response the response to the request
+   * @throws IOException if the request is invalid.
+   */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String name = request.getParameter("username");

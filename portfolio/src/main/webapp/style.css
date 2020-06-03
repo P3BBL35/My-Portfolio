@@ -8,9 +8,11 @@ body {
 h1 {
   color: white;
   margin-top: 60px;
+  margin-left: 10px;
 }
 
 #content {
+  float: left;
   margin-left: 10px;
   margin-right: auto;
   width: 700px;
@@ -88,6 +90,12 @@ h1 {
   margin-left: 10px;
   margin-right: auto;
   width: 650px;
+}
+
+#htmlforms {
+  float: left;
+  margin-right: 10px;
+  margin-left: auto;
 }
 
 #greeting-container {

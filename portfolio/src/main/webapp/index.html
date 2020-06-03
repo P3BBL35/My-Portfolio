@@ -39,11 +39,6 @@
       parsley, she knows how to grow it all. She currently works as a software engineer at Google,
       which was how I originally got the inspiration to intern at Google this summer.</p>
   </div>
-  <div id="quotes">
-    <p>Click here to get a random message:</p>
-    <button onclick="addRandomGreeting()">Random Quotes!</button>
-    <div id="greeting-container"></div>
-  </div>
   <div id="htmlforms">
     <form action="/data" method="POST">
       <textarea name="username">Name</textarea>
@@ -51,6 +46,20 @@
       <input type="submit" />
       <br/><br/>
     </form>
+    <div id="numComments">
+      <a href="index.html?numComments=5">5</a>
+      <a href="index.html?numComments=10">10</a>
+      <a href="index.html?numComments=25">25</a>
+    </div>
+    <div id="display-comments"></div>
+  </div>
+  <div id="quotes">
+    <p>Click here to get a random message:</p>
+    <button onclick="addRandomGreeting()">Random Quotes!</button>
+    <div id="greeting-container"></div>
+  </div>
+  <div class="links">
+    <br>
   </div>
 </body>
 

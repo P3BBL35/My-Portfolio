@@ -32,10 +32,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** Servlet that returns some example content. TODO: modify this file to handle comments data */
+/** Servlet that returns comments data */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
+  /**
+   * Handles a GET request, and fetches all the comments data from the Datastore.
+   */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Query query = new Query("Comment").addSort("time", SortDirection.DESCENDING);
@@ -62,9 +65,6 @@ public class DataServlet extends HttpServlet {
    * Sends a POST request to the server. In this case, the POST request simply adds a comment to
    * the list of comments, and redirects the user back to the same page so that the comment appears
    * on that page.
-   * @param request the servlet request
-   * @param response the response to the request
-   * @throws IOException if the request is invalid.
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {

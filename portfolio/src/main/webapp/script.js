@@ -36,7 +36,7 @@ function addRandomGreeting() {
 }
 
 /**
- * Fetches the message from the servlet and displays it on the page
+ * Fetches the message from the servlet and displays it on the page.
  */
 function getMessage() {
   fetch('/data').then(response => response.json()).then((messages) => {
@@ -50,18 +50,10 @@ function getMessage() {
   });
 }
 
-function getParameter(name, url) {
-  if (!url) {
-    url = window.location.href;
-  }
-  name = name.replace(/[\[\]]/g, '\\$&');
-  let regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-      results =  regex.exec(url);
-  if (!results) {
-    return null;
-  }
-  if (!results[2]) {
-    return '';
-  }
-  return decodeURIComponent(results[2].replace(/\+/g, ' '));
+/**
+ * Gets a parameter with the given name from the query URL.
+ */
+function getParameter(name) {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(name);
 }

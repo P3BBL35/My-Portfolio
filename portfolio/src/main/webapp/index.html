@@ -8,13 +8,13 @@
   <script src="script.js"></script>
 </head>
 
-<body onload="getMessage()">
+<body>
   <div class="topnav">
     <a class="active" href="index.html">Home</a>
     <a href="gallery.html">LightScape Gallery</a>
+    <a href="comments.html">Comments</a>
     <div class="dropdown">
-      <button class="dropdownbutton">My Links<i class="fa fa-caret-down"></i>
-      </button>
+      <button class="dropdownbutton">My Links</button>
       <div class="dropdowncontent">
         <a href="https://github.com/P3BBL35">GitHub</a>
         <a href="https://linkedin.com/in/andrew-li-6134a41a3">LinkedIn</a>
@@ -38,20 +38,6 @@
       instruments, and playing games with her dear brothers. Oh, and gardening. From jalapenos to
       parsley, she knows how to grow it all. She currently works as a software engineer at Google,
       which was how I originally got the inspiration to intern at Google this summer.</p>
-  </div>
-  <div id="htmlforms">
-    <form action="/data" method="POST">
-      <textarea name="username">Name</textarea>
-      <textarea name="comment">Enter your comment here</textarea>
-      <input type="submit" />
-      <br/><br/>
-    </form>
-    <div id="numComments">
-      <a href="index.html?numComments=5">5</a>
-      <a href="index.html?numComments=10">10</a>
-      <a href="index.html?numComments=25">25</a>
-    </div>
-    <div id="display-comments"></div>
   </div>
   <div id="quotes">
     <p>Click here to get a random message:</p>

@@ -13,16 +13,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Models a servlet for deleting data from the datastore
+ * Models a servlet for deleting data from the datastore.
  */
 @WebServlet("/delete-data")
 public class DeleteDataServlet extends HttpServlet {
 
   /**
    * Deletes the contents of the datastore.
-   * @param request the server request
-   * @param response the response to the request
-   * @throws IOException if the request is invalid
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {

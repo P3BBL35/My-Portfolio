@@ -44,7 +44,7 @@ function getMessage() {
     let html = '';
     let numDisplay = getParameter("numComments");
     if (numDisplay == null) {
-      numDisplay = 10; // Default value
+      numDisplay = 10;  // Default value.
     }
     for (index = 0; index < messages.length && index < numDisplay; index++) {
       html += '<p>' + messages[index] + '</p><br/>';

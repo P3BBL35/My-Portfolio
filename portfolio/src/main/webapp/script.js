@@ -42,7 +42,10 @@ function getMessage() {
   fetch('/data').then(response => response.json()).then((messages) => {
     console.log(messages);
     let html = '';
-    let numDisplay = getParameter("numComments", 10);
+    let numDisplay = getParameter("numComments");
+    if (numDisplay == null) {
+      numDisplay = 10; // Default value
+    }
     for (index = 0; index < messages.length && index < numDisplay; index++) {
       html += '<p>' + messages[index] + '</p><br/>';
     }

@@ -50,6 +50,13 @@ function getMessage() {
   });
 }
 
+function deleteMessages() {
+  fetch('/delete-data', {method: 'POST'}).then(() => {
+    document.getElementById('display-comments').innerHTML = 
+        '<p>Nothing to see here!</p><br/>';
+  });
+}
+
 /**
  * Gets a parameter with the given name from the query URL.
  */

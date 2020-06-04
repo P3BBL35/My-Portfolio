@@ -8,9 +8,11 @@ body {
 h1 {
   color: white;
   margin-top: 60px;
+  margin-left: 10px;
 }
 
 #content {
+  float: left;
   margin-left: 10px;
   margin-right: auto;
   width: 700px;
@@ -44,6 +46,7 @@ h1 {
   padding: 14px 16px;
   background-color: inherit;
   font-family: inherit;
+  margin: 0;
 }
 
 .dropdowncontent {
@@ -84,10 +87,43 @@ h1 {
   color: #FFDF00;
 }
 
+#numComments {
+  margin-left: 20px;
+}
+
+#numComments a {
+  text-decoration: none;
+  background-color: #333;
+  color: white;
+  padding: 6px 8px;
+  text-align: left;
+  display: block;
+  float: left;
+}
+
+#numComments a:hover {
+  background-color: #32C7BD;
+}
+
+#display-comments {
+  display: block;
+  color: white;
+  padding: 8px 8px;
+  text-align: left;
+  margin-left: 20px;
+}
+
 #quotes {
   margin-left: 10px;
   margin-right: auto;
   width: 650px;
+}
+
+#htmlforms {
+  float: left;
+  margin-top: 20px;
+  margin-right: 10px;
+  margin-left: auto;
 }
 
 #greeting-container {

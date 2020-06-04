@@ -34,8 +34,14 @@ h1 {
 }
 
 .dropdown {
-  float: left;
-  overflow: hidden;
+  float: right;
+}
+
+.dropdownbutton div {
+  width: 20px;
+  height: 2px;
+  background-color: white;
+  margin: 3px 0;
 }
 
 .dropdown .dropdownbutton {
@@ -51,14 +57,16 @@ h1 {
 
 .dropdowncontent {
   display: none;
+  position: fixed;
+  right: 0;
   background-color: #333;
-  min-width: 160px;
+  min-width: 100px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
 }
 
 .dropdowncontent a {
-  float: none;
+  float: right;
   color: white;
   padding: 12px 16px;
   text-decoration: none;
@@ -75,7 +83,7 @@ h1 {
   font-size: 16px;
 }
 
-.topnav a:hover, .topnav a:hover .dropdownbutton, .dropdown:hover, .dropdowncontent a:hover {
+.topnav a:hover, .dropdown:hover .dropdownbutton, .dropdownbutton a:hover {
   background-color: #32C7BD;
 }
 

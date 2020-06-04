@@ -41,12 +41,20 @@ function addRandomGreeting() {
 function getMessage() {
   fetch('/data').then(response => response.json()).then((messages) => {
     console.log(messages);
-    let html = '';
-    let numDisplay = getParameter("numComments", 10);
-    for (index = 0; index < messages.length && index < numDisplay; index++) {
-      html += '<p>' + messages[index] + '</p><br/>';
+    let commentsDiv = document.createElement('div');
+    let numDisplay = getParameter("numComments");
+    if (numDisplay == null) {
+      numDisplay = 10;  // Default value.
     }
-    document.getElementById('display-comments').innerHTML = html;
+    for (index = 0; index < messages.length && index < numDisplay; index++) {
+      let comment = document.createElement('p');
+      let linebreak = document.createElement('br');
+      comment.textContent = messages[index];
+
+      commentsDiv.appendChild(comment);
+      commentsDiv.appendChild(linebreak);
+    }
+    document.getElementById('display-comments').appendChild(commentsDiv);
   });
 }
 

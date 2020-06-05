@@ -15,6 +15,7 @@
 package com.google.sps.servlets;
 
 import java.io.IOException;
+import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.ZonedDateTime;
@@ -36,24 +37,47 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
+  private static final int TIME_DESCENDING = 0;
+  private static final int TIME_ASCENDING = 1;
+
+  private int numDisplay = 10;  // Default value.
+  private int sortOrder;
+
   /**
    * Handles a GET request, and fetches all the comments data from the Datastore.
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    boolean toChange = getToChange(request);
+    if (toChange) {
+      numDisplay = Integer.parseInt(request.getHeader("numComments"));
+      sortOrder = getSortOrder(request);
+    }
+
     Query query = new Query("Comment").addSort("time", SortDirection.DESCENDING);
+    if (sortOrder == TIME_ASCENDING) {
+      query = new Query("Comment").addSort("time", SortDirection.ASCENDING);
+    }
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
 
     List<String> comments = new ArrayList<>();
+    int index = 0;
     for (Entity entity : results.asIterable()) {
       String name = (String) (entity.getProperty("name"));
       String comment = (String) (entity.getProperty("comment"));
 
       final String result = name + ": " + comment;
       comments.add(result);
+      
+      index++;
+      if (index >= numDisplay) {
+        break;
+      }
     }
+
+    comments.add(numDisplay + ";" + sortOrder);
 
     Gson gson = new Gson();
     String json = gson.toJson(comments);
@@ -80,6 +104,31 @@ public class DataServlet extends HttpServlet {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(commentEntity);
 
-    response.sendRedirect("/comments.html");
+    String url = "/comments.html?numComments=" + numDisplay + "&commentSort=" + sortOrder;
+
+    response.sendRedirect(url);
+  }
+
+  /**
+   * Gets the sort order from the request header, and parses it accordingly.
+   * @return an integer indicating the sort order.
+   */
+  private int getSortOrder(HttpServletRequest request) {
+    String data = request.getHeader("commentSort");
+    if ("timeAscending".equals(data)) {
+      return TIME_ASCENDING;
+    } else if ("timeDescending".equals(data)) {
+      return TIME_DESCENDING;
+    } else {
+      return -1;
+    }
+  }
+
+  /**
+   * @return true if the fields need to be updated, false otherwise
+   */
+  private boolean getToChange(HttpServletRequest request) {
+    String data = request.getHeader("change");
+    return "true".equals(data);
   }
 }

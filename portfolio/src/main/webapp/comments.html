@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="style.css">
   <script src="script.js"></script>
 </head>
-<body onload="getMessage()">
+<body onload="initMessages()">
   <div class="topnav">
     <a href="index.html">Home</a>
     <a href="gallery.html">LightScape Gallery</a>
@@ -39,17 +39,17 @@
       <br/><br/>
     </form>
     <div id="numComments">
-      <button onclick="addParameter('numComments', 5); getMessage();">5</button>
-      <button onclick="addParameter('numComments', 10); getMessage();">10</button>
-      <button onclick="addParameter('numComments', 25); getMessage();">25</button>
+      <button onclick="addParameter('numComments', 5); updateMessage();">5</button>
+      <button onclick="addParameter('numComments', 10); updateMessage();">10</button>
+      <button onclick="addParameter('numComments', 25); updateMessage();">25</button>
     </div>
     <br/><br/>
     <div class="commentSort">
       <label for="commentSort">Sort By</label>
-      <select id="commentSort" onchange="reorder()">
-        <option disabled selected value> -- Select an option -- </option>
-        <option value="timeAscending">Oldest</option>
+      <select id="commentSort" onchange="getOrder(); updateMessage();">
+        <option disabled selected>Sort By</option>
         <option value="timeDescending">Newest</option>
+        <option value="timeAscending">Oldest</option>
       </select>
     </div>
     <br/>

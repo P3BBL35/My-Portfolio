@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-var order = "timeDescending";
-
 /**
  * Adds a random greeting to the page.
  */
@@ -38,33 +36,49 @@ function addRandomGreeting() {
 }
 
 /**
+ * Updates the sort order and number of comments to display in the server,
+ * and fetches them according to the new parameters.
+ */
+function updateMessage() {
+  let headers = new Headers();
+  headers.append('numComments', getParameter('numComments'));
+  headers.append('commentSort', getParameter('commentSort'));
+  headers.append('change', true);
+
+  fetch('/data', {headers: headers}).then(response => response.json()).then((messages) => 
+      getMessages(messages));
+}
+
+/**
  * Fetches the message from the servlet and displays it on the page.
  */
-function getMessage() {
-  fetch('/data').then(response => response.json()).then((messages) => {
+function initMessages() {
+  fetch('/data').then(response => response.json()).then((messages) => getMessages(messages));
+}
+
+/**
+ * Insert all messages from the given list into a new div on the page
+ */
+function getMessages(messages) {
     console.log(messages);
 
     let section = document.getElementById('display-comments');
     let commentsDiv = document.createElement('div');
-    let numDisplay = getParameter("numComments");
-    if (numDisplay == null) {
-      numDisplay = 10;  // Default value.
-    }
+
+    let sortNum = messages[messages.length - 1];
+    let colonIndex = sortNum.indexOf(";");
+    let sortOrder = sortNum.substring(colonIndex + 1, sortNum.length);
+    addParameter('numComments', sortNum.substring(0, colonIndex));
+    addParameter('commentSort', sortOrder);
 
     section.innerHTML = '';
 
     // Order the comments appropriately. Default value is by newest.
-    if (order === "timeAscending") {
-      for (index = messages.length - 1; index >= 0 && index >= messages.length - numDisplay; index--) {
-        addComment(commentsDiv, messages, index);  
-       }
-    } else {
-      for (index = 0; index < messages.length && index < numDisplay; index++) {
-        addComment(commentsDiv, messages, index);
-      }
+    for (index = 0; index < messages.length - 1; index++) {
+      addComment(commentsDiv, messages, index);
     }
     section.appendChild(commentsDiv);
-  });
+
 }
 
 /**
@@ -72,11 +86,9 @@ function getMessage() {
  */
 function addComment(commentsDiv, messages, index) {
   let comment = document.createElement('p');
-  let linebreak = document.createElement('br');
   comment.textContent = messages[index];
 
   commentsDiv.appendChild(comment);
-  commentsDiv.appendChild(linebreak);
 }
 
 function deleteMessages() {
@@ -107,9 +119,7 @@ function addParameter(name, value) {
 /**
  * Reorder the messages in the order selected by the user
  */
-function reorder() {
+function getOrder() {
   let select = document.getElementById('commentSort');
-  order = select.options[select.selectedIndex].value;
-  console.log(order);
-  getMessage();
+  addParameter('commentSort', select.options[select.selectedIndex].value);
 }

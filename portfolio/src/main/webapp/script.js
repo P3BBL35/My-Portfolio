@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+var order = "timeDescending";
+
 /**
  * Adds a random greeting to the page.
  */
@@ -41,21 +43,40 @@ function addRandomGreeting() {
 function getMessage() {
   fetch('/data').then(response => response.json()).then((messages) => {
     console.log(messages);
+
+    let section = document.getElementById('display-comments');
     let commentsDiv = document.createElement('div');
     let numDisplay = getParameter("numComments");
     if (numDisplay == null) {
       numDisplay = 10;  // Default value.
     }
-    for (index = 0; index < messages.length && index < numDisplay; index++) {
-      let comment = document.createElement('p');
-      let linebreak = document.createElement('br');
-      comment.textContent = messages[index];
 
-      commentsDiv.appendChild(comment);
-      commentsDiv.appendChild(linebreak);
+    section.innerHTML = '';
+
+    // Order the comments appropriately. Default value is by newest.
+    if (order === "timeAscending") {
+      for (index = messages.length - 1; index >= 0 && index >= messages.length - numDisplay; index--) {
+        addComment(commentsDiv, messages, index);  
+       }
+    } else {
+      for (index = 0; index < messages.length && index < numDisplay; index++) {
+        addComment(commentsDiv, messages, index);
+      }
     }
-    document.getElementById('display-comments').appendChild(commentsDiv);
+    section.appendChild(commentsDiv);
   });
+}
+
+/**
+ * Adds a comment/message at the given index in the messages list into the comments div.
+ */
+function addComment(commentsDiv, messages, index) {
+  let comment = document.createElement('p');
+  let linebreak = document.createElement('br');
+  comment.textContent = messages[index];
+
+  commentsDiv.appendChild(comment);
+  commentsDiv.appendChild(linebreak);
 }
 
 function deleteMessages() {
@@ -71,4 +92,24 @@ function deleteMessages() {
 function getParameter(name) {
   const urlParams = new URLSearchParams(window.location.search);
   return urlParams.get(name);
+}
+
+/**
+ * Adds a parameter with the given name and value to the query URL.
+ */
+function addParameter(name, value) {
+  const urlParams = new URLSearchParams(window.location.search);
+  urlParams.set(name, value);
+  let newQuery = window.location.pathname + '?' + urlParams.toString();
+  history.pushState(null, '', newQuery);
+}
+
+/**
+ * Reorder the messages in the order selected by the user
+ */
+function reorder() {
+  let select = document.getElementById('commentSort');
+  order = select.options[select.selectedIndex].value;
+  console.log(order);
+  getMessage();
 }

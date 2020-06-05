@@ -99,18 +99,24 @@ h1 {
   margin-left: 20px;
 }
 
-#numComments a {
+#numComments button {
   text-decoration: none;
   background-color: #333;
   color: white;
-  padding: 6px 8px;
+  padding: 8px 8px;
   text-align: left;
   display: block;
   float: left;
 }
 
-#numComments a:hover {
+#numComments button:hover {
   background-color: #32C7BD;
+}
+
+.commentsOrder {
+  float: left;
+  display: inline-block;
+  margin-left: 20px;
 }
 
 #display-comments {
@@ -119,6 +125,16 @@ h1 {
   padding: 8px 8px;
   text-align: left;
   margin-left: 20px;
+}
+
+#display-comments p {
+  padding: 8px 8px;
+  display: block;
+  background-color: #111;
+}
+
+#display-comments p:hover {
+  background-color: #101010;
 }
 
 #quotes {

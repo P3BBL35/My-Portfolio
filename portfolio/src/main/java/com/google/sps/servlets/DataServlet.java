@@ -37,6 +37,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
+  private static final int ERROR = -1;
   private static final int TIME_DESCENDING = 0;
   private static final int TIME_ASCENDING = 1;
 
@@ -115,20 +116,20 @@ public class DataServlet extends HttpServlet {
    */
   private int getSortOrder(HttpServletRequest request) {
     String data = request.getHeader("commentSort");
-    if ("timeAscending".equals(data)) {
+    if (data.equals("timeAscending")) {
       return TIME_ASCENDING;
-    } else if ("timeDescending".equals(data)) {
+    } else if (data.equals("timeDescending")) {
       return TIME_DESCENDING;
     } else {
-      return -1;
+      return ERROR;
     }
   }
 
   /**
-   * @return true if the fields need to be updated, false otherwise
+   * @return true if the fields need to be updated, false otherwise.
    */
   private boolean getToChange(HttpServletRequest request) {
     String data = request.getHeader("change");
-    return "true".equals(data);
+    return data != null && data.equals("true");
   }
 }

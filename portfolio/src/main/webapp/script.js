@@ -57,7 +57,7 @@ function initMessages() {
 }
 
 /**
- * Insert all messages from the given list into a new div on the page
+ * Insert all messages from the given list into a new div on the page.
  */
 function getMessages(messages) {
     console.log(messages);
@@ -66,9 +66,9 @@ function getMessages(messages) {
     let commentsDiv = document.createElement('div');
 
     let sortNum = messages[messages.length - 1];
-    let colonIndex = sortNum.indexOf(";");
-    let sortOrder = sortNum.substring(colonIndex + 1, sortNum.length);
-    addParameter('numComments', sortNum.substring(0, colonIndex));
+    let semicolonIndex = sortNum.indexOf(";");
+    let sortOrder = sortNum.substring(semicolonIndex + 1, sortNum.length);
+    addParameter('numComments', sortNum.substring(0, semicolonIndex));
     addParameter('commentSort', sortOrder);
 
     section.innerHTML = '';
@@ -93,8 +93,7 @@ function addComment(commentsDiv, messages, index) {
 
 function deleteMessages() {
   fetch('/delete-data', {method: 'POST'}).then(() => {
-    document.getElementById('display-comments').innerHTML = 
-        '<p>Nothing to see here!</p><br/>';
+    document.getElementById('display-comments').innerHTML = '';
   });
 }
 
@@ -117,7 +116,7 @@ function addParameter(name, value) {
 }
 
 /**
- * Reorder the messages in the order selected by the user
+ * Reorder the messages in the order selected by the user.
  */
 function getOrder() {
   let select = document.getElementById('commentSort');

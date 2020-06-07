@@ -99,26 +99,46 @@ h1 {
   margin-left: 20px;
 }
 
-#numComments a {
+#numComments button {
+  border: none;
   text-decoration: none;
   background-color: #333;
   color: white;
-  padding: 6px 8px;
+  padding: 8px 8px;
   text-align: left;
   display: block;
   float: left;
 }
 
-#numComments a:hover {
+#numComments button:hover {
   background-color: #32C7BD;
+}
+
+.commentsOrder {
+  float: left;
+  display: inline-block;
+  margin-left: 20px;
 }
 
 #display-comments {
   display: block;
   color: white;
-  padding: 8px 8px;
+  padding: 16px 16px;
   text-align: left;
   margin-left: 20px;
+}
+
+#display-comments p {
+  margin: 20px 20px;
+  padding: 16px 16px;
+  width: 700px;
+  display: block;
+  background-color: #333;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+}
+
+#display-comments p:hover {
+  background-color: #101010;
 }
 
 #quotes {

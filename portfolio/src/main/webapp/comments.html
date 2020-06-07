@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="style.css">
   <script src="script.js"></script>
 </head>
-<body onload="getMessage()">
+<body onload="initMessages()">
   <div class="topnav">
     <a href="index.html">Home</a>
     <a href="gallery.html">LightScape Gallery</a>
@@ -27,15 +27,30 @@
   <h1>Comments</h1>
   <div id="htmlforms">
     <form action="/data" method="POST">
-      <input type="text"  name="username" />
-      <textarea name="comment">Enter your comment here</textarea>
+      <label for:"name">Username</label>
+      <br/>
+      <input type="text" name="username" id="name"/>
+      <br/><br/>
+      <label for:"comment">Enter your comment here:</label>
+      <br/>
+      <textarea name="comment" id="comment"></textarea>
+      <br/><br/>
       <input type="submit" />
       <br/><br/>
     </form>
     <div id="numComments">
-      <a href="comments.html?numComments=5">5</a>
-      <a href="comments.html?numComments=10">10</a>
-      <a href="comments.html?numComments=25">25</a>
+      <button onclick="addParameter('numComments', 5); updateMessage();">5</button>
+      <button onclick="addParameter('numComments', 10); updateMessage();">10</button>
+      <button onclick="addParameter('numComments', 25); updateMessage();">25</button>
+    </div>
+    <br/><br/>
+    <div class="commentSort">
+      <label for="commentSort">Sort By</label>
+      <select id="commentSort" onchange="getOrder(); updateMessage();">
+        <option disabled selected>Sort By</option>
+        <option value="timeDescending">Newest</option>
+        <option value="timeAscending">Oldest</option>
+      </select>
     </div>
     <br/>
     <div id="display-comments"></div>

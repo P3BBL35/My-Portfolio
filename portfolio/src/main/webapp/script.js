@@ -128,13 +128,12 @@ function getOrder() {
  * hidden.
  */
 function isLoggedIn() {
-  fetch('/login').then(response => response.text()).then((toDisplay) => {
-    console.log(toDisplay);
-    console.log(typeof toDisplay);
+  fetch('/login').then(response => response.text()).then((userLoggedIn) => {
+    console.log('User login status: ' + userLoggedIn);
 
     let comments = document.getElementById("htmlforms");
 
-    if (toDisplay.trim() == 'false') {
+    if (userLoggedIn.trim() == 'false') {
       comments.style.display = 'none';
     } else {
       comments.style.display = 'initial';

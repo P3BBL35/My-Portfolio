@@ -22,17 +22,8 @@ public class LoginServlet extends HttpServlet {
     UserService userService = UserServiceFactory.getUserService();
     PrintWriter writer = response.getWriter();
 
-    boolean isLoggedIn = userService.isUserLoggedIn();
     response.setContentType("text/html");
-    writer.println("false");
-
-    if (userService.isUserLoggedIn()) {
-      // writer.println("The user is logged in!");
-    } else {
-      // writer.println("The user is not logged in!");
-      // String loginUrl = userService.createLoginURL("/login");
-      //  writer.println("<p>Login <a href=\"" + loginUrl + "\">here</a>.</p>");
-    }
+    writer.println(userService.isUserLoggedIn(););
   }
 
   @Override

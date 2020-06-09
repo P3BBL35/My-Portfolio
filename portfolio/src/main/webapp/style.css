@@ -178,6 +178,10 @@ h1 {
     filter: grayscale();
 }
 
+#login {
+  display: hidden;
+}
+
 @keyframes fadeIn {
   0% {
     opacity: 0;

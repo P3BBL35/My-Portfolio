@@ -7,6 +7,9 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.gson.Gson;
+import java.util.List;
+import java.util.ArrayList;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.annotation.WebServlet;
@@ -19,24 +22,43 @@ public class LoginServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    UserService userService = UserServiceFactory.getUserService();
-    PrintWriter writer = response.getWriter();
-
-    boolean isLoggedIn = userService.isUserLoggedIn();
     response.setContentType("text/html");
-    writer.println("false");
+    UserService userService = UserServiceFactory.getUserService();
 
+    List<String> list = new ArrayList<>();
     if (userService.isUserLoggedIn()) {
-      // writer.println("The user is logged in!");
+      String userEmail = userService.getCurrentUser().getEmail();
+      String urlToRedirectToAfterUserLogsOut = "/comments.html";
+      String logoutUrl = userService.createLogoutURL(urlToRedirectToAfterUserLogsOut);
+      
+      list.add("true");
+      list.add(logoutUrl);
     } else {
-      // writer.println("The user is not logged in!");
-      // String loginUrl = userService.createLoginURL("/login");
-      //  writer.println("<p>Login <a href=\"" + loginUrl + "\">here</a>.</p>");
+      String urlToRedirectToAfterUserLogsIn = "/comments.html";
+      String loginUrl = userService.createLoginURL(urlToRedirectToAfterUserLogsIn);
+
+      list.add("false");
+      list.add(loginUrl);
     }
+
+    Gson gson = new Gson();
+    String json = gson.toJson(list);
+    response.getWriter().println(json);
   }
 
-  @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
+  /**
+   * Gets the nickname of the user with the given ID.
+   * TODO: Add nickname functionality
+   */
+  private String getUserNickname(String id) {
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    Query query = new Query("User").setFilter(new Query.FilterPredicate("id",
+        Query.FilterOperator.EQUAL, id));
+    PreparedQuery results = datastore.prepare(query);
+    Entity entity = results.asSingleEntity();
+    if (entity == null) {
+      return "";
+    }
+    return (String) (entity.getProperty("display-name"));
   }
 }

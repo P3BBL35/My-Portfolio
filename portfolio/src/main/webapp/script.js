@@ -125,19 +125,31 @@ function getOrder() {
 /**
  * Checks whether the user is logged in or not. If the user is logged in, then
  * display the comments section. Otherwise, the comments section will remain
- * hidden.
+ * hidden, and the user is directed to a login page.
  */
 function isLoggedIn() {
-  fetch('/login').then(response => response.text()).then((toDisplay) => {
-    console.log(toDisplay);
-    console.log(typeof toDisplay);
+  fetch('/login').then(response => response.json()).then((status) => {
+    let loginStatus = status[0];
+    console.log('User login status: ' + loginStatus);
 
     let comments = document.getElementById("htmlforms");
+    let login = document.getElementById("login");
+    let logout = document.getElementById("logout");
 
-    if (toDisplay.trim() == 'false') {
+    if (loginStatus == 'false') {
+      let loginURL = status[1];
+
       comments.style.display = 'none';
+      logout.style.display = 'none';
+      login.style.display = 'inline';
+      login.innerHTML = "<p><a href=\"" + loginURL + "\">Login Here</a></p>";
     } else {
+      let logoutURL = status[1];
+
       comments.style.display = 'initial';
+      login.style.display = 'none';
+      logout.style.display = 'inline';
+      logout.innerHTML = "<p><a href=\"" + logoutURL + "\">Logout Here</a></p>";
     }
   });
 

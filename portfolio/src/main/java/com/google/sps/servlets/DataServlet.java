@@ -16,6 +16,8 @@ package com.google.sps.servlets;
 
 import java.io.IOException;
 import java.io.BufferedReader;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.ZonedDateTime;
@@ -28,6 +30,8 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -93,19 +97,24 @@ public class DataServlet extends HttpServlet {
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String name = request.getParameter("username");
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    UserService userService = UserServiceFactory.getUserService();
+
     String comment = request.getParameter("comment");
     String time = DateTimeFormatter.ISO_DATE_TIME.format(ZonedDateTime.now(ZoneId.of("UTC")));
 
     Entity commentEntity = new Entity("Comment");
-    commentEntity.setProperty("name", name);
+    commentEntity.setProperty("name", userService.getCurrentUser().getEmail());
     commentEntity.setProperty("comment", comment);
     commentEntity.setProperty("time", time);
 
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(commentEntity);
 
-    String url = "/comments.html?numComments=" + numDisplay + "&commentSort=" + sortOrder;
+    String url = "/comments.html";
+    try {
+      url = appendQuery(url, "commentSort=" + sortOrder).toString();
+      url = appendQuery(url, "numComments=" + numDisplay).toString();
+    } catch (Exception e) {}
 
     response.sendRedirect(url);
   }
@@ -131,5 +140,37 @@ public class DataServlet extends HttpServlet {
   private boolean getToChange(HttpServletRequest request) {
     String data = request.getHeader("change");
     return data != null && data.equals("true");
+  }
+
+  /**
+   * @return the display name of the currently logged-in user.
+   */
+  private String getDisplayName(String id) {
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    Query query = new Query("User").setFilter(new Query.FilterPredicate("id",
+        Query.FilterOperator.EQUAL, id));  
+    PreparedQuery results = datastore.prepare(query);
+    Entity entity = results.asSingleEntity();
+    if (entity == null) {
+      return "";
+    }
+    return (String) (entity.getProperty("display-name"));
+  }
+
+  /**
+   * @return a new URI with the given query appended.
+   */
+  private URI appendQuery(String uri, String query) throws URISyntaxException {
+    URI oldURL = new URI(uri);
+
+    String newQuery = oldURL.getQuery();
+    if (newQuery == null) {
+      newQuery = query;
+    } else {
+      newQuery += "&" + query;
+    }
+
+    return new URI(oldURL.getScheme(), oldURL.getAuthority(), oldURL.getPath(), newQuery,
+        oldURL.getFragment());
   }
 }

@@ -145,7 +145,7 @@ public class DataServlet extends HttpServlet {
   }
 
   /**
-   * @return the display name of the currently logged-in user.  
+   * @return the display name of the currently logged-in user. 
    */
   private String getDisplayName(String id) {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();

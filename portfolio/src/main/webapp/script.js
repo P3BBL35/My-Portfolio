@@ -126,9 +126,9 @@ function getOrder() {
  * hidden, and the user is directed to a login page.
  */
 function isLoggedIn() {
-  fetch('/login').then(response => response.json()).then((stat) => {
-    let loginStatus = stat[0];
-    console.log(stat);
+  fetch('/login').then(response => response.json()).then((status) => {
+    let loginStatus = status[0];
+    console.log(status);
     console.log('User login status: ' + loginStatus);
 
     let comments = document.getElementById("htmlforms");
@@ -139,7 +139,7 @@ function isLoggedIn() {
     let nickname = document.getElementById("set-nickname");
 
     if (loginStatus == 'false') {
-      let loginURL = stat[1];
+      let loginURL = status[1];
 
       welcome.innerHTML = "<h2>You are not logged in</h2>";
       nickname.style.display = 'none';
@@ -149,8 +149,8 @@ function isLoggedIn() {
       login.style.display = 'inline';
       login.innerHTML = "<p><a href=\"" + loginURL + "\">Login Here</a></p>";
     } else {
-      let logoutURL = stat[1];
-      let displayName = stat[2];
+      let logoutURL = status[1];
+      let displayName = status[2];
       
       let h2 = document.createElement("h2");
       h2.textContent = "Welcome, " + displayName;

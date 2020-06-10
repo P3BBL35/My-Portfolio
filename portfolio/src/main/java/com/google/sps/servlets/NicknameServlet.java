@@ -26,8 +26,6 @@ public class NicknameServlet extends HttpServlet {
     UserService userService = UserServiceFactory.getUserService();
     String name = request.getParameter("nickname");
 
-    System.out.println(name);
-
     if (name != null && !name.equals("")) {
       final String userId = userService.getCurrentUser().getUserId();
 
@@ -37,7 +35,6 @@ public class NicknameServlet extends HttpServlet {
 
       datastore.put(entity);
     }
-
     response.sendRedirect("/comments.html");
   }
 }

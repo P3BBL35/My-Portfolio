@@ -25,27 +25,23 @@ public class LoginServlet extends HttpServlet {
     response.setContentType("text/html");
     UserService userService = UserServiceFactory.getUserService();
 
-    List<String> list = new ArrayList<>();
-
-    list.add(String.valueOf(userService.isUserLoggedIn()));
-
+    List<String> loginInfo = new ArrayList<>();
+    loginInfo.add(String.valueOf(userService.isUserLoggedIn()));
     if (userService.isUserLoggedIn()) {
       String userEmail = userService.getCurrentUser().getEmail();
-      String urlToRedirectToAfterUserLogsOut = "/comments.html";
-      String logoutUrl = userService.createLogoutURL(urlToRedirectToAfterUserLogsOut);
+      String logoutUrl = userService.createLogoutURL("/comments.html");
         
-      list.add(logoutUrl);
-      list.add(getUserNickname(userService.getCurrentUser().getUserId(),
+      loginInfo.add(logoutUrl);
+      loginInfo.add(getUserNickname(userService.getCurrentUser().getUserId(),
           userService.getCurrentUser().getEmail()));
     } else {
-      String urlToRedirectToAfterUserLogsIn = "/comments.html";
-      String loginUrl = userService.createLoginURL(urlToRedirectToAfterUserLogsIn);
+      String loginUrl = userService.createLoginURL("/comments.html");
 
-      list.add(loginUrl);
+      loginInfo.add(loginUrl);
     }
 
     Gson gson = new Gson();
-    String json = gson.toJson(list);
+    String json = gson.toJson(loginInfo);
     response.getWriter().println(json);
   }
 

@@ -78,7 +78,6 @@ function getMessages(messages) {
       addComment(commentsDiv, messages, index);
     }
     section.appendChild(commentsDiv);
-
 }
 
 /**
@@ -121,4 +120,24 @@ function addParameter(name, value) {
 function getOrder() {
   let select = document.getElementById('commentSort');
   addParameter('commentSort', select.options[select.selectedIndex].value);
+}
+
+/**
+ * Checks whether the user is logged in or not. If the user is logged in, then
+ * display the comments section. Otherwise, the comments section will remain
+ * hidden.
+ */
+function isLoggedIn() {
+  fetch('/login').then(response => response.text()).then((userLoggedIn) => {
+    console.log('User login status: ' + userLoggedIn);
+
+    let comments = document.getElementById("htmlforms");
+
+    if (userLoggedIn.trim() == 'false') {
+      comments.style.display = 'none';
+    } else {
+      comments.style.display = 'initial';
+    }
+  });
+
 }

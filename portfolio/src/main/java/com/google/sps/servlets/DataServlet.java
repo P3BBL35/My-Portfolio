@@ -64,13 +64,14 @@ public class DataServlet extends HttpServlet {
       query = new Query("Comment").addSort("time", SortDirection.ASCENDING);
     }
 
+    UserService userService = UserServiceFactory.getUserService();
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
 
     List<String> comments = new ArrayList<>();
     int index = 0;
     for (Entity entity : results.asIterable()) {
-      String name = (String) (entity.getProperty("name"));
+      String name = getDisplayName((String) (entity.getProperty("name")));
       String comment = (String) (entity.getProperty("comment"));
 
       final String result = name + ": " + comment;
@@ -104,7 +105,8 @@ public class DataServlet extends HttpServlet {
     String time = DateTimeFormatter.ISO_DATE_TIME.format(ZonedDateTime.now(ZoneId.of("UTC")));
 
     Entity commentEntity = new Entity("Comment");
-    commentEntity.setProperty("name", userService.getCurrentUser().getEmail());
+
+    commentEntity.setProperty("name", userService.getCurrentUser().getUserId());
     commentEntity.setProperty("comment", comment);
     commentEntity.setProperty("time", time);
 
@@ -143,7 +145,7 @@ public class DataServlet extends HttpServlet {
   }
 
   /**
-   * @return the display name of the currently logged-in user.
+   * @return the display name of the currently logged-in user. 
    */
   private String getDisplayName(String id) {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -154,7 +156,7 @@ public class DataServlet extends HttpServlet {
     if (entity == null) {
       return "";
     }
-    return (String) (entity.getProperty("display-name"));
+    return (String) (entity.getProperty("name"));
   }
 
   /**

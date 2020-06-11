@@ -26,40 +26,39 @@ public class LoginServlet extends HttpServlet {
     response.setContentType("text/html");
     UserService userService = UserServiceFactory.getUserService();
 
-    List<String> list = new ArrayList<>();
+    List<String> loginInfo = new ArrayList<>();
+    loginInfo.add(String.valueOf(userService.isUserLoggedIn()));
     if (userService.isUserLoggedIn()) {
       String userEmail = userService.getCurrentUser().getEmail();
-      String urlToRedirectToAfterUserLogsOut = "/comments.html";
-      String logoutUrl = userService.createLogoutURL(urlToRedirectToAfterUserLogsOut);
-      
-      list.add("true");
-      list.add(logoutUrl);
+      String logoutUrl = userService.createLogoutURL("/comments.html");
+        
+      loginInfo.add(logoutUrl);
+      loginInfo.add(getUserNickname(userService.getCurrentUser().getUserId(),
+          userService.getCurrentUser().getEmail()));
     } else {
-      String urlToRedirectToAfterUserLogsIn = "/comments.html";
-      String loginUrl = userService.createLoginURL(urlToRedirectToAfterUserLogsIn);
+      String loginUrl = userService.createLoginURL("/comments.html");
 
-      list.add("false");
-      list.add(loginUrl);
+      loginInfo.add(loginUrl);
     }
 
     Gson gson = new Gson();
-    String json = gson.toJson(list);
+    String json = gson.toJson(loginInfo);
     response.getWriter().println(json);
   }
 
   /**
-   * Gets the nickname of the user with the given ID.
-   * TODO: Add nickname functionality
+   * Gets the nickname of the user with the given ID. If the user does not have a
+   * nickname set, then return the user's email as their display name.
    */
-  private String getUserNickname(String id) {
+  private String getUserNickname(String id, String email) {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Query query = new Query("User").setFilter(new Query.FilterPredicate("id",
         Query.FilterOperator.EQUAL, id));
     PreparedQuery results = datastore.prepare(query);
     Entity entity = results.asSingleEntity();
     if (entity == null) {
-      return "";
+      return email;
     }
-    return (String) (entity.getProperty("display-name"));
+    return (String) (entity.getProperty("name"));
   }
 }

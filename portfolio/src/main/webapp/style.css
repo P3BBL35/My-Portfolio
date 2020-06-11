@@ -120,6 +120,10 @@ h1 {
   margin-left: 20px;
 }
 
+#comments-section {
+  grid-area: comments;
+}
+
 #display-comments {
   display: block;
   color: white;
@@ -148,10 +152,9 @@ h1 {
 }
 
 #htmlforms {
-  float: left;
-  margin-top: 20px;
-  margin-right: 10px;
-  margin-left: auto;
+  grid-area: input;
+  margin-top: 10px;
+  justify-self: left;
 }
 
 #greeting-container {
@@ -175,11 +178,42 @@ h1 {
 }
 
 .gallery img:hover {
-    filter: grayscale();
+  filter: grayscale();
 }
 
 #login {
   display: hidden;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 10% 40% 40% 10%;
+  grid-template-rows: 210px auto;
+  align-items: start;
+  row-gap: 15px;
+  column-gap: 15px;
+  grid-template-areas:
+    ". input ui ."
+    ". comments . .";
+}
+
+#user-interface {
+  grid-area: ui;
+}
+
+#user-interface a {
+  color: white;
+  text-decoration: none;
+  width: 100px;
+  text-align: center;
+  display: block;
+  background-color: #333;
+  padding: 14px 16px;
+}
+
+#user-interface a:hover {
+  background-color: #32C7BD;
+
 }
 
 @keyframes fadeIn {

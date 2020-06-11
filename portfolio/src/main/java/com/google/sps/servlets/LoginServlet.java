@@ -7,6 +7,9 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.gson.Gson;
+import java.util.List;
+import java.util.ArrayList;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.annotation.WebServlet;
@@ -19,15 +22,41 @@ public class LoginServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    UserService userService = UserServiceFactory.getUserService();
-    PrintWriter writer = response.getWriter();
 
     response.setContentType("text/html");
-    writer.println(userService.isUserLoggedIn(););
+    UserService userService = UserServiceFactory.getUserService();
+
+    List<String> loginInfo = new ArrayList<>();
+    loginInfo.add(String.valueOf(userService.isUserLoggedIn()));
+    if (userService.isUserLoggedIn()) {
+      String logoutUrl = userService.createLogoutURL("/comments.html"); 
+      loginInfo.add(logoutUrl);
+
+      String userEmail = userService.getCurrentUser().getEmail();
+      loginInfo.add(getUserNickname(userService.getCurrentUser().getUserId(), userEmail));
+    } else {
+      String loginUrl = userService.createLoginURL("/comments.html");
+      loginInfo.add(loginUrl);
+    }
+
+    Gson gson = new Gson();
+    String json = gson.toJson(loginInfo);
+    response.getWriter().println(json);
   }
 
-  @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
+  /**
+   * Gets the nickname of the user with the given ID. If the user does not have a
+   * nickname set, then return the user's email as their display name.
+   */
+  private String getUserNickname(String id, String email) {
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    Query query = new Query("User").setFilter(
+        new Query.FilterPredicate("id", Query.FilterOperator.EQUAL, id));
+    PreparedQuery results = datastore.prepare(query);
+    Entity entity = results.asSingleEntity();
+    if (entity == null) {
+      return email;
+    }
+    return (String) (entity.getProperty("name"));
   }
 }

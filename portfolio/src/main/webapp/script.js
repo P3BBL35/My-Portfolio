@@ -62,8 +62,7 @@ function initMessages() {
 function getMessages(messages) {
     console.log(messages);
 
-    let section = document.getElementById('display-comments');
-    let commentsDiv = document.createElement('div');
+    let commentsDiv = document.getElementById('display-comments');
 
     let sortNum = messages[messages.length - 1];
     let semicolonIndex = sortNum.indexOf(";");
@@ -71,13 +70,12 @@ function getMessages(messages) {
     addParameter('numComments', sortNum.substring(0, semicolonIndex));
     addParameter('commentSort', sortOrder);
 
-    section.innerHTML = '';
+    commentsDiv.innerHTML = '';
 
     // Order the comments appropriately. Default value is by newest.
     for (index = 0; index < messages.length - 1; index++) {
       addComment(commentsDiv, messages, index);
     }
-    section.appendChild(commentsDiv);
 }
 
 /**
@@ -125,19 +123,46 @@ function getOrder() {
 /**
  * Checks whether the user is logged in or not. If the user is logged in, then
  * display the comments section. Otherwise, the comments section will remain
- * hidden.
+ * hidden, and the user is directed to a login page.
  */
 function isLoggedIn() {
-  fetch('/login').then(response => response.text()).then((userLoggedIn) => {
-    console.log('User login status: ' + userLoggedIn);
+
+  fetch('/login').then(response => response.json()).then((loginInfo) => {
+    let loginStatus = loginInfo[0];
+    console.log(loginInfo);
+    console.log('User login status: ' + loginStatus);
 
     let comments = document.getElementById("htmlforms");
+    let comSection = document.getElementById("comments-section");
+    let login = document.getElementById("login");
+    let logout = document.getElementById("logout");
+    let welcome = document.getElementById("welcome-message");
+    let nickname = document.getElementById("set-nickname");
 
-    if (userLoggedIn.trim() == 'false') {
+    if (loginStatus == 'false') {
+      let loginURL = loginInfo[1];
+
+      welcome.innerHTML = "<h2>You are not logged in</h2>";
+      nickname.style.display = 'none';
       comments.style.display = 'none';
+      comSection.style.display = 'none';
+      logout.style.display = 'none';
+      login.style.display = 'inline';
+      login.innerHTML = "<p><a href=\"" + loginURL + "\">Login Here</a></p>";
     } else {
+      let logoutURL = loginInfo[1];
+      let displayName = loginInfo[2];
+      
+      let h2 = document.createElement("h2");
+      h2.textContent = "Welcome, " + displayName;
+      welcome.appendChild(h2);
+      
+      nickname.style.display = 'inline';
       comments.style.display = 'initial';
+      comSection.style.display = 'initial';
+      login.style.display = 'none';
+      logout.style.display = 'inline';
+      logout.innerHTML = "<p><a href=\"" + logoutURL + "\">Logout Here</a></p>";
     }
   });
-
 }

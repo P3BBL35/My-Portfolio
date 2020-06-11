@@ -116,7 +116,7 @@ public class DataServlet extends HttpServlet {
     try {
       url = appendQuery(url, "commentSort=" + sortOrder).toString();
       url = appendQuery(url, "numComments=" + numDisplay).toString();
-    } catch (Exception e) {}
+    } catch (URISyntaxException e) {}
 
     response.sendRedirect(url);
   }
@@ -149,8 +149,8 @@ public class DataServlet extends HttpServlet {
    */
   private String getDisplayName(String id) {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Query query = new Query("User").setFilter(new Query.FilterPredicate("id",
-        Query.FilterOperator.EQUAL, id));  
+    Query query = new Query("User").setFilter(
+        new Query.FilterPredicate("id", Query.FilterOperator.EQUAL, id));  
     PreparedQuery results = datastore.prepare(query);
     Entity entity = results.asSingleEntity();
     if (entity == null) {

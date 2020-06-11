@@ -29,15 +29,13 @@ public class LoginServlet extends HttpServlet {
     List<String> loginInfo = new ArrayList<>();
     loginInfo.add(String.valueOf(userService.isUserLoggedIn()));
     if (userService.isUserLoggedIn()) {
-      String userEmail = userService.getCurrentUser().getEmail();
-      String logoutUrl = userService.createLogoutURL("/comments.html");
-        
+      String logoutUrl = userService.createLogoutURL("/comments.html"); 
       loginInfo.add(logoutUrl);
-      loginInfo.add(getUserNickname(userService.getCurrentUser().getUserId(),
-          userService.getCurrentUser().getEmail()));
+
+      String userEmail = userService.getCurrentUser().getEmail();
+      loginInfo.add(getUserNickname(userService.getCurrentUser().getUserId(), userEmail));
     } else {
       String loginUrl = userService.createLoginURL("/comments.html");
-
       loginInfo.add(loginUrl);
     }
 
@@ -52,8 +50,8 @@ public class LoginServlet extends HttpServlet {
    */
   private String getUserNickname(String id, String email) {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Query query = new Query("User").setFilter(new Query.FilterPredicate("id",
-        Query.FilterOperator.EQUAL, id));
+    Query query = new Query("User").setFilter(
+        new Query.FilterPredicate("id", Query.FilterOperator.EQUAL, id));
     PreparedQuery results = datastore.prepare(query);
     Entity entity = results.asSingleEntity();
     if (entity == null) {

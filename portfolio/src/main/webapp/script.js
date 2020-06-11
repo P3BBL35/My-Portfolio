@@ -126,6 +126,7 @@ function getOrder() {
  * hidden, and the user is directed to a login page.
  */
 function isLoggedIn() {
+
   fetch('/login').then(response => response.json()).then((status) => {
     let loginStatus = status[0];
     console.log(status);

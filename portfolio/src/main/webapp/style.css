@@ -185,7 +185,7 @@ h1 {
   display: hidden;
 }
 
-.comments-container {
+.container {
   display: grid;
   grid-template-columns: 10% 40% 40% 10%;
   grid-template-rows: 210px auto;

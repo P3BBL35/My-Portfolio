@@ -166,3 +166,28 @@ function isLoggedIn() {
     }
   });
 }
+
+google.charts.load('current', {'packages': ['corechart']});
+google.charts.setOnLoadCallback(drawChart);
+
+
+/**
+ * Callback that creates and populates a data table, instantiates
+ * a pie chart, and draws it.
+ */
+function drawChart() {
+  let data = new google.visualization.DataTable();
+  data.addColumn('string', 'Type');
+  data.addColumn('number', 'Number Watched');
+  data.addRows([
+      ['Anime', 10],
+      ['Disney', 8],
+      ['Action', 5]
+  ]);
+
+  let options = {'title': 'Movies I\'ve Watched',
+                 'width': 400,
+                 'height': 400};
+  let chart = new google.visualization.PieChart(document.getElementById("charts-id"));
+  chart.draw(data, options);
+}

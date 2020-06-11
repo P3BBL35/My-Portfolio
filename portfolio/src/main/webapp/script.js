@@ -176,18 +176,35 @@ google.charts.setOnLoadCallback(drawChart);
  * a pie chart, and draws it.
  */
 function drawChart() {
-  let data = new google.visualization.DataTable();
-  data.addColumn('string', 'Type');
-  data.addColumn('number', 'Number Watched');
-  data.addRows([
-      ['Anime', 10],
-      ['Disney', 8],
-      ['Action', 5]
-  ]);
+  fetch('/charts').then(response => response.json()).then((data) => {
+    console.log(data);
 
-  let options = {'title': 'Movies I\'ve Watched',
-                 'width': 400,
-                 'height': 400};
-  let chart = new google.visualization.PieChart(document.getElementById("charts-id"));
-  chart.draw(data, options);
+    let dataTable = new google.visualization.DataTable();
+    dataTable.addColumn('string', 'Gender');
+    dataTable.addColumn('number', 'Very Favorable');
+    dataTable.addColumn('number', 'Somewhat Favorable');
+    dataTable.addColumn('number', 'Somewhat Unfavorable');
+    dataTable.addColumn('number', 'Very Unfavorable');
+    dataTable.addColumn('number', 'Heard Of; No Opinion');
+    dataTable.addColumn('number', 'Never Heard of');
+    
+    Object.keys(data).forEach((gender) => {
+      dataTable.addRow([
+          gender,
+          data[gender][0],
+          data[gender][1],
+          data[gender][2],
+          data[gender][3],
+          data[gender][4],
+          data[gender][5]
+      ]);
+    });
+    let options = {'title': 'Favorability of Anime Movies Based on Gender',
+                   'width': '700',
+                   'height': '500',
+                   'isStacked': 'percent'};
+    
+    let chart = new google.visualization.ColumnChart(document.getElementById("charts-id"));
+    chart.draw(dataTable, options);
+  });
 }

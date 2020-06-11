@@ -201,8 +201,6 @@ h1 {
 
 #charts-id {
   grid-area: charts;
-  background-color: #333;
-  color: white;
 }
 
 .comments-container {

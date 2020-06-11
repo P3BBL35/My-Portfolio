@@ -25,13 +25,13 @@ public class ChartsServlet extends HttpServlet {
       String line = scanner.nextLine();
       String[] data = line.split(",");
 
-      String favorability = data[0];
+      String gender = data[0];
       ArrayList<Integer> percentages = new ArrayList<>();
       for (int i = 1; i < data.length; i++) {
         percentages.add(Integer.parseInt(data[i]));
       }
 
-      genderPopularity.put(favorability, percentages);
+      genderPopularity.put(gender, percentages);
     }
     scanner.close();
   }

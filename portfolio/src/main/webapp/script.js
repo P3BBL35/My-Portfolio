@@ -187,16 +187,17 @@ function drawChart() {
     dataTable.addColumn('number', 'Very Unfavorable');
     dataTable.addColumn('number', 'Heard Of; No Opinion');
     dataTable.addColumn('number', 'Never Heard of');
-    
+   
     Object.keys(data).forEach((gender) => {
+      let gender_stats = data[gender];
       dataTable.addRow([
           gender,
-          data[gender][0],
-          data[gender][1],
-          data[gender][2],
-          data[gender][3],
-          data[gender][4],
-          data[gender][5]
+          gender_stats[0],
+          gender_stats[1],
+          gender_stats[2],
+          gender_stats[3],
+          gender_stats[4],
+          gender_stats[5]
       ]);
     });
     let options = {'title': 'Favorability of Anime Movies Based on Gender',

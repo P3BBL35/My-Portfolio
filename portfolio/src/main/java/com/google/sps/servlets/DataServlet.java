@@ -116,9 +116,7 @@ public class DataServlet extends HttpServlet {
     try {
       url = appendQuery(url, "commentSort=" + sortOrder).toString();
       url = appendQuery(url, "numComments=" + numDisplay).toString();
-    } catch (URISyntaxException e) {
-      System.out.println("Query string invalid!");
-    }
+    } catch (URISyntaxException e) {}
 
     response.sendRedirect(url);
   }

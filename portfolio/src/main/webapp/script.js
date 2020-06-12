@@ -166,3 +166,46 @@ function isLoggedIn() {
     }
   });
 }
+
+google.charts.load('current', {'packages': ['corechart']});
+google.charts.setOnLoadCallback(drawChart);
+
+
+/**
+ * Callback that creates and populates a data table, instantiates
+ * a pie chart, and draws it.
+ */
+function drawChart() {
+  fetch('/charts').then(response => response.json()).then((data) => {
+    console.log(data);
+
+    let dataTable = new google.visualization.DataTable();
+    dataTable.addColumn('string', 'Gender');
+    dataTable.addColumn('number', 'Very Favorable');
+    dataTable.addColumn('number', 'Somewhat Favorable');
+    dataTable.addColumn('number', 'Somewhat Unfavorable');
+    dataTable.addColumn('number', 'Very Unfavorable');
+    dataTable.addColumn('number', 'Heard Of; No Opinion');
+    dataTable.addColumn('number', 'Never Heard of');
+   
+    Object.keys(data).forEach((gender) => {
+      let gender_stats = data[gender];
+      dataTable.addRow([
+          gender,
+          gender_stats[0],
+          gender_stats[1],
+          gender_stats[2],
+          gender_stats[3],
+          gender_stats[4],
+          gender_stats[5]
+      ]);
+    });
+    let options = {'title': 'Favorability of Anime Movies Based on Gender',
+                   'width': '700',
+                   'height': '500',
+                   'isStacked': 'percent'};
+    
+    let chart = new google.visualization.ColumnChart(document.getElementById("charts-id"));
+    chart.draw(dataTable, options);
+  });
+}

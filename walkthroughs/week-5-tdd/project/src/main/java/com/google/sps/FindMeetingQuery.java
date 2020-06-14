@@ -37,17 +37,16 @@ public final class FindMeetingQuery {
       return validTimeRanges;
     }
 
-    Set<TimeRange> unavailableTime = determineUnavailableTime(events, request);
-    Iterator<TimeRange> iterator = unavailableTime.iterator();
-    TimeRange currentEvent = (iterator.hasNext()) ?  iterator.next() : null;
+    Iterator<TimeRange> unavailableTimeIterator = determineUnavailableTime(events, request).iterator();
+    TimeRange currentEvent = (unavailableTimeIterator.hasNext()) ?  unavailableTimeIterator.next() : null;
     if (currentEvent != null) {
       if (TimeRange.START_OF_DAY < currentEvent.start()
           && currentEvent.start() - TimeRange.START_OF_DAY >= request.getDuration()) {
         validTimeRanges.add(TimeRange.fromStartEnd(TimeRange.START_OF_DAY, currentEvent.start(), false));
       }
 
-      while (iterator.hasNext()) {
-        TimeRange nextEvent = iterator.next();
+      while (unavailableTimeIterator.hasNext()) {
+        TimeRange nextEvent = unavailableTimeIterator.next();
 
         if (nextEvent.start() - currentEvent.end() >= request.getDuration()) {
           validTimeRanges.add(TimeRange.fromStartEnd(currentEvent.end(), nextEvent.start(), false));
@@ -80,6 +79,7 @@ public final class FindMeetingQuery {
       }
     });
 
+    // TODO: Can make this O(n + m) rather than O(n * m).
     for (String attendee : attendees) {
       for (Event event : events) {
         if (event.getAttendees().contains(attendee)) {
@@ -95,23 +95,23 @@ public final class FindMeetingQuery {
    */
   private TreeSet<TimeRange> combineRanges(TreeSet<TimeRange> timeRanges) {
     Iterator<TimeRange> iterator = timeRanges.iterator();
-    TimeRange firstRange = (iterator.hasNext()) ? iterator.next() : null;
+    TimeRange currentRange = (iterator.hasNext()) ? iterator.next() : null;
 
-    while (firstRange != null && iterator.hasNext()) {
-      TimeRange toCombine = iterator.next();
-      if (firstRange.overlaps(toCombine) || firstRange.end() == toCombine.start()) {
-        timeRanges.remove(firstRange);
-        timeRanges.remove(toCombine);
+    while (currentRange != null && iterator.hasNext()) {
+      TimeRange nextRange = iterator.next();
+      if (currentRange.overlaps(nextRange) || currentRange.end() == nextRange.start()) {
+        timeRanges.remove(currentRange);
+        timeRanges.remove(nextRange);
         timeRanges.add(TimeRange.fromStartEnd(
-            Math.min(firstRange.start(), toCombine.start()),
-            Math.max(firstRange.end(), toCombine.end()),
+            Math.min(currentRange.start(), nextRange.start()),
+            Math.max(currentRange.end(), nextRange.end()),
             false));
 
         // Reset iterator to contain the newly combined piece.
         iterator = timeRanges.iterator();
-        firstRange = iterator.next();
+        currentRange = iterator.next();
       } else {
-        firstRange = toCombine;  // Store current range for comparing with the next.
+        currentRange = nextRange;  // Store current range for comparing with the next.
       }
     }
     return timeRanges;

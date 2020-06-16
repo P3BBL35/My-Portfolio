@@ -209,3 +209,32 @@ function drawChart() {
     chart.draw(dataTable, options);
   });
 }
+
+function loadWindow(imageLink) {
+  let modal = document.getElementById("modal");
+  modal.style.display = 'block';
+   
+  let content = document.getElementById("modal-content");
+  let image = document.createElement('img');
+  image.id = "display-image";
+  image.src = "images/" + imageLink;
+  content.appendChild(image);
+}
+
+function galleryOnLoad() {
+  let modal = document.getElementById("modal");
+  let close = document.getElementById("close");
+  let content = document.getElementById("modal-content");
+
+  close.onclick = function() {
+    modal.style.display = 'none';
+    content.removeChild(content.lastChild);
+  }
+
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = 'none';
+      content.removeChild(content.lastChild);
+    }
+  }
+}

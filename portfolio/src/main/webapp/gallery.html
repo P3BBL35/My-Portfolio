@@ -7,7 +7,7 @@
   <script src="script.js"></script>
 </head>
 
-<body>
+<body onload="galleryOnLoad()">
   <div class="topnav">
     <a href="index.html">Home</a>
     <a class="active" href="gallery.html">LightScape Gallery</a>
@@ -36,16 +36,20 @@
       .</p>
   </div>
   <div class="gallery">
-    <a href="images/lightscape1.jpg"><img src="images/lightscape1.jpg"></a>
-    <a href="images/lightscape2.jpg"><img src="images/lightscape2.jpg"></a>
-    <a href="images/lightscape3.jpg"><img src="images/lightscape3.jpg"></a>
-    <a href="images/lightscape4.jpg"><img src="images/lightscape4.jpg"></a>
-    <a href="images/lightscape5.jpg"><img src="images/lightscape5.jpg"></a>
-    <br>
-    <a href="images/lightscape6.jpg"><img src="images/lightscape6.jpg"></a>
-    <a href="images/lightscape7.jpg"><img src="images/lightscape7.jpg"></a>
-    <a href="images/lightscape8.jpg"><img src="images/lightscape8.jpg"></a>
-    <a href="images/lightscape9.jpg"><img src="images/lightscape9.jpg"></a>
+    <img src="images/lightscape1.jpg" onclick="loadWindow('lightscape1.jpg')">
+    <img src="images/lightscape2.jpg" onclick="loadWindow('lightscape2.jpg')">
+    <img src="images/lightscape3.jpg" onclick="loadWindow('lightscape3.jpg')">
+    <img src="images/lightscape4.jpg" onclick="loadWindow('lightscape4.jpg')">
+    <img src="images/lightscape5.jpg" onclick="loadWindow('lightscape5.jpg')">
+    <img src="images/lightscape6.jpg" onclick="loadWindow('lightscape6.jpg')">
+    <img src="images/lightscape7.jpg" onclick="loadWindow('lightscape7.jpg')">
+    <img src="images/lightscape8.jpg" onclick="loadWindow('lightscape8.jpg')">
+    <img src="images/lightscape9.jpg" onclick="loadWindow('lightscape9.jpg')">
+  </div>
+  <div id="modal">
+    <div id="modal-content">
+      <span id="close">&times;</span>
+    </div>
   </div>
 </body>
 

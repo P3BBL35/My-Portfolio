@@ -181,6 +181,46 @@ h1 {
   filter: grayscale();
 }
 
+#modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  left: 0;
+  top: 0;
+  width: auto;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4);
+  color: white;
+}
+
+#modal-content {
+  background-color: #111;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 20px;
+  width: 60%;
+}
+
+#modal-content img {
+  max-width: 60%;
+}
+
+#close {
+  float: right;
+  color: #aaa;
+  font-weight: bold;
+  font-size: 28px;
+}
+
+#close:hover, #close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
 #login {
   display: hidden;
 }

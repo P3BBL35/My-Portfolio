@@ -147,14 +147,14 @@ public final class FindMeetingQuery {
         determineAvailableTime(events, allAttendees, request.getDuration());
     Iterator<TimeRange> totalAvailableTimeIterator = totalAvailableTime.iterator();
     
-    if (!totalAvailableTimeIterator.hasNext()) {
+    if (totalAvailableTimeIterator.hasNext()) {
+      return totalAvailableTime;
+    } else {
       if (request.getAttendees().isEmpty()) {  // Consider when there are no mandatory attendees.
         return totalAvailableTime;
       } else {
         return meetingTimes;
       }
-    } else {
-      return totalAvailableTime;
     }
   }
 }

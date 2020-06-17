@@ -104,28 +104,28 @@ public final class FindMeetingQuery {
     TimeRange currentEvent = (unavailableTimeIterator.hasNext()) ?  unavailableTimeIterator.next() : null;
     if (currentEvent == null) {  // There are no events in the day.
       return Arrays.asList(TimeRange.WHOLE_DAY);
-    } else {
-      List<TimeRange> availableTime = new ArrayList<>();
-      if (TimeRange.START_OF_DAY < currentEvent.start()
-          && currentEvent.start() - TimeRange.START_OF_DAY >= meetingDuration) {
-        availableTime.add(TimeRange.fromStartEnd(TimeRange.START_OF_DAY, currentEvent.start(), false));
-      }
-
-      while (unavailableTimeIterator.hasNext()) {
-        TimeRange nextEvent = unavailableTimeIterator.next();
-
-        if (nextEvent.start() - currentEvent.end() >= meetingDuration) {
-          availableTime.add(TimeRange.fromStartEnd(currentEvent.end(), nextEvent.start(), false));
-        }
-        currentEvent = nextEvent;
-      }
-
-      if (currentEvent.end() < TimeRange.END_OF_DAY
-          && TimeRange.END_OF_DAY - currentEvent.end() + 1 >= meetingDuration) {
-        availableTime.add(TimeRange.fromStartEnd(currentEvent.end(), TimeRange.END_OF_DAY, true));
-      }
-      return availableTime;
     }
+    
+    List<TimeRange> availableTime = new ArrayList<>();
+    if (TimeRange.START_OF_DAY < currentEvent.start()
+        && currentEvent.start() - TimeRange.START_OF_DAY >= meetingDuration) {
+      availableTime.add(TimeRange.fromStartEnd(TimeRange.START_OF_DAY, currentEvent.start(), false));
+    }
+
+    while (unavailableTimeIterator.hasNext()) {
+      TimeRange nextEvent = unavailableTimeIterator.next();
+
+      if (nextEvent.start() - currentEvent.end() >= meetingDuration) {
+        availableTime.add(TimeRange.fromStartEnd(currentEvent.end(), nextEvent.start(), false));
+      }
+      currentEvent = nextEvent;
+    }
+
+    if (currentEvent.end() < TimeRange.END_OF_DAY
+        && TimeRange.END_OF_DAY - currentEvent.end() + 1 >= meetingDuration) {
+      availableTime.add(TimeRange.fromStartEnd(currentEvent.end(), TimeRange.END_OF_DAY, true));
+    }
+    return availableTime;
   }
 
   /**

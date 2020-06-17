@@ -100,10 +100,12 @@ public final class FindMeetingQuery {
    * a collection of their events for that day.
    */
   private List<TimeRange> determineAvailableTime(Collection<Event> events, Collection<String> attendees, long meetingDuration) {
-    List<TimeRange> availableTime = new ArrayList<>();
     Iterator<TimeRange> unavailableTimeIterator = determineUnavailableTime(events, attendees).iterator();
     TimeRange currentEvent = (unavailableTimeIterator.hasNext()) ?  unavailableTimeIterator.next() : null;
-    if (currentEvent != null) {
+    if (currentEvent == null) {  // There are no events in the day.
+      return Arrays.asList(TimeRange.WHOLE_DAY);
+    } else {
+      List<TimeRange> availableTime = new ArrayList<>();
       if (TimeRange.START_OF_DAY < currentEvent.start()
           && currentEvent.start() - TimeRange.START_OF_DAY >= meetingDuration) {
         availableTime.add(TimeRange.fromStartEnd(TimeRange.START_OF_DAY, currentEvent.start(), false));
@@ -122,11 +124,8 @@ public final class FindMeetingQuery {
           && TimeRange.END_OF_DAY - currentEvent.end() + 1 >= meetingDuration) {
         availableTime.add(TimeRange.fromStartEnd(currentEvent.end(), TimeRange.END_OF_DAY, true));
       }
-    } else {  // There are no times taken in the day.
-      availableTime.add(TimeRange.WHOLE_DAY);
+      return availableTime;
     }
-    
-    return availableTime;
   }
 
   /**

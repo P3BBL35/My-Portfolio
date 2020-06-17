@@ -47,15 +47,7 @@ public final class FindMeetingQuery {
    * @return a Set containing all the unavailable time in the day.
    */
   private Set<TimeRange> determineUnavailableTime(Collection<Event> events, Collection<String> attendees) {
-    TreeSet<TimeRange> timeTaken = new TreeSet<>((range1, range2) -> {
-      if (range1.start() < range2.start()) {
-        return -1;
-      } else if (range1.start() > range2.start()) {
-        return 1;
-      } else {
-        return 0;
-      }
-    });
+    TreeSet<TimeRange> timeTaken = new TreeSet<>(TimeRange.ORDER_BY_START);
 
     // TODO: Can make this O(n + m) rather than O(n * m).
     for (String attendee : attendees) {
@@ -146,14 +138,10 @@ public final class FindMeetingQuery {
         determineAvailableTime(events, allAttendees, request.getDuration());
     Iterator<TimeRange> totalAvailableTimeIterator = totalAvailableTime.iterator();
     
-    if (totalAvailableTimeIterator.hasNext()) {
+    if (totalAvailableTimeIterator.hasNext() || request.getAttendees().isEmpty()) {
       return totalAvailableTime;
-    } else {
-      if (request.getAttendees().isEmpty()) {  // Consider when there are no mandatory attendees.
-        return totalAvailableTime;
-      } else {
-        return meetingTimes;
-      }
     }
+
+    return meetingTimes;  // No times to fit all optional attendees.
   }
 }

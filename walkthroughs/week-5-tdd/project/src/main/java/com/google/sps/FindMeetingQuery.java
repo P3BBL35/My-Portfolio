@@ -17,6 +17,7 @@ package com.google.sps;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -36,39 +37,16 @@ public final class FindMeetingQuery {
     if (request.getDuration() > TimeRange.WHOLE_DAY.duration()) {
       return validTimeRanges;
     }
-
-    Iterator<TimeRange> unavailableTimeIterator = determineUnavailableTime(events, request).iterator();
-    TimeRange currentEvent = (unavailableTimeIterator.hasNext()) ?  unavailableTimeIterator.next() : null;
-    if (currentEvent != null) {
-      if (TimeRange.START_OF_DAY < currentEvent.start()
-          && currentEvent.start() - TimeRange.START_OF_DAY >= request.getDuration()) {
-        validTimeRanges.add(TimeRange.fromStartEnd(TimeRange.START_OF_DAY, currentEvent.start(), false));
-      }
-
-      while (unavailableTimeIterator.hasNext()) {
-        TimeRange nextEvent = unavailableTimeIterator.next();
-
-        if (nextEvent.start() - currentEvent.end() >= request.getDuration()) {
-          validTimeRanges.add(TimeRange.fromStartEnd(currentEvent.end(), nextEvent.start(), false));
-        }
-        currentEvent = nextEvent;
-      }
-
-      if (currentEvent.end() < TimeRange.END_OF_DAY
-          && TimeRange.END_OF_DAY - currentEvent.end() + 1 >= request.getDuration()) {
-        validTimeRanges.add(TimeRange.fromStartEnd(currentEvent.end(), TimeRange.END_OF_DAY, true));
-      }
-    } else {  // There are no times taken in the day.
-      validTimeRanges.add(TimeRange.WHOLE_DAY);
-    }
-    return validTimeRanges;
+ 
+    return considerOptionals(
+        determineAvailableTime(events, request.getAttendees(), request.getDuration()),
+        events, request);
   }
 
   /**
    * @return a Set containing all the unavailable time in the day.
    */
-  private Set<TimeRange> determineUnavailableTime(Collection<Event> events, MeetingRequest request) {
-    Collection<String> attendees = request.getAttendees();
+  private Set<TimeRange> determineUnavailableTime(Collection<Event> events, Collection<String> attendees) {
     TreeSet<TimeRange> timeTaken = new TreeSet<>((range1, range2) -> {
       if (range1.start() < range2.start()) {
         return -1;
@@ -117,4 +95,65 @@ public final class FindMeetingQuery {
     return timeRanges;
   }
 
+  /**
+   * Returns a list containing all the TimeRanges that the given collection of attendees are available for given
+   * a collection of their events for that day.
+   */
+  private List<TimeRange> determineAvailableTime(Collection<Event> events, Collection<String> attendees, long meetingDuration) {
+    Iterator<TimeRange> unavailableTimeIterator = determineUnavailableTime(events, attendees).iterator();
+    TimeRange currentEvent = (unavailableTimeIterator.hasNext()) ?  unavailableTimeIterator.next() : null;
+    if (currentEvent == null) {  // There are no events in the day.
+      return Arrays.asList(TimeRange.WHOLE_DAY);
+    }
+    
+    List<TimeRange> availableTime = new ArrayList<>();
+    if (TimeRange.START_OF_DAY < currentEvent.start()
+        && currentEvent.start() - TimeRange.START_OF_DAY >= meetingDuration) {
+      availableTime.add(TimeRange.fromStartEnd(TimeRange.START_OF_DAY, currentEvent.start(), false));
+    }
+
+    while (unavailableTimeIterator.hasNext()) {
+      TimeRange nextEvent = unavailableTimeIterator.next();
+
+      if (nextEvent.start() - currentEvent.end() >= meetingDuration) {
+        availableTime.add(TimeRange.fromStartEnd(currentEvent.end(), nextEvent.start(), false));
+      }
+      currentEvent = nextEvent;
+    }
+
+    if (currentEvent.end() < TimeRange.END_OF_DAY
+        && TimeRange.END_OF_DAY - currentEvent.end() + 1 >= meetingDuration) {
+      availableTime.add(TimeRange.fromStartEnd(currentEvent.end(), TimeRange.END_OF_DAY, true));
+    }
+    return availableTime;
+  }
+
+  /**
+   * Given the set of meeting times, this method refits the potential meeting times to fit
+   * optional attendees with the schedule, if applicable.
+   */
+  private Collection<TimeRange> considerOptionals(
+      List<TimeRange> meetingTimes, Collection<Event> events, MeetingRequest request) {
+    if (request.getOptionalAttendees().isEmpty()) {
+      return meetingTimes;
+    }
+
+    Collection<String> allAttendees = new HashSet<>();;
+    allAttendees.addAll(request.getAttendees());
+    allAttendees.addAll(request.getOptionalAttendees());
+
+    Collection<TimeRange> totalAvailableTime = 
+        determineAvailableTime(events, allAttendees, request.getDuration());
+    Iterator<TimeRange> totalAvailableTimeIterator = totalAvailableTime.iterator();
+    
+    if (totalAvailableTimeIterator.hasNext()) {
+      return totalAvailableTime;
+    } else {
+      if (request.getAttendees().isEmpty()) {  // Consider when there are no mandatory attendees.
+        return totalAvailableTime;
+      } else {
+        return meetingTimes;
+      }
+    }
+  }
 }
